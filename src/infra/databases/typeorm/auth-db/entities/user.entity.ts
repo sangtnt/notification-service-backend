@@ -3,6 +3,10 @@ import { BaseSchema } from '../../base/base.entity';
 
 @Entity({ name: 'users' })
 export class UserSchema extends BaseSchema {
+  @Column({ name: 'user_name', type: 'varchar', length: 255, unique: true })
+  @Index()
+  userName?: string;
+
   @Column({ name: 'email', type: 'varchar', length: 255, unique: true, nullable: true })
   @Index()
   email?: string;

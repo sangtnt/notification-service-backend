@@ -6,7 +6,7 @@ import { RpcException } from '@/core/exceptions/rpc.exception';
 import { status as RpcExceptionStatus } from '@grpc/grpc-js';
 import { ErrorCodes } from '@/shared/constants/rp-exception.constant';
 import { hashString } from '@/shared/utils/hashing.util';
-import { UserEntity } from '@/core/entities/user.entity';
+import { UserDto } from '../dtos/user.dto';
 
 @Injectable()
 export class CreateUsersUseCase {
@@ -15,14 +15,12 @@ export class CreateUsersUseCase {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(createUserDto: CreateUsersRequestDto): Promise<CreateUsersResponseDto> {
-    this.validateCreateUserRequest(createUserDto);
+  async execute(request: CreateUsersRequestDto): Promise<CreateUsersResponseDto> {
+    this.validateCreateUserRequest(request);
 
     const isAvailable = await this.userRepository.checkAvailableEmailsAndPhones(
-      createUserDto.users
-        .map((user) => user.email?.trim())
-        .filter((email) => typeof email === 'string'),
-      createUserDto.users
+      request.users.map((user) => user.email?.trim()).filter((email) => typeof email === 'string'),
+      request.users
         .map((user) => user.phoneNumber?.trim())
         .filter((phone) => typeof phone === 'string'),
     );
@@ -34,13 +32,13 @@ export class CreateUsersUseCase {
       });
     }
 
-    const processUserData = async (user: UserEntity): Promise<void> => {
+    const processUserData = async (user: UserDto): Promise<void> => {
       user.password = await hashString(user.password);
       user.email = user.email?.trim()?.toLowerCase();
     };
 
     await Promise.all(
-      createUserDto.users
+      request.users
         .map((user) => {
           if (user.password?.trim()) {
             return processUserData(user);
@@ -50,11 +48,11 @@ export class CreateUsersUseCase {
         .filter((task) => task !== undefined),
     );
 
-    return { ids: await this.userRepository.saveMany(createUserDto.users) };
+    return { ids: await this.userRepository.saveMany(request.users) };
   }
 
   private validateCreateUserRequest(createUserDto: CreateUsersRequestDto): void {
-    const validateUserData = (user: UserEntity): boolean => {
+    const validateUserData = (user: UserDto): boolean => {
       if (!user.email && !user.phoneNumber) {
         return false;
       }

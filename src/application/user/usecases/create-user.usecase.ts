@@ -6,7 +6,7 @@ import { RpcException } from '@/core/exceptions/rpc.exception';
 import { status as RpcExceptionStatus } from '@grpc/grpc-js';
 import { ErrorCodes } from '@/shared/constants/rp-exception.constant';
 import { hashString } from '@/shared/utils/hashing.util';
-import { UserEntity } from '@/core/entities/user.entity';
+import { UserDto } from '../dtos/user.dto';
 
 @Injectable()
 export class CreateUserUseCase {
@@ -15,12 +15,12 @@ export class CreateUserUseCase {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(createUserDto: UserEntity): Promise<CreateUserResponseDto> {
-    this.validateCreateUserRequest(createUserDto);
+  async execute(request: UserDto): Promise<CreateUserResponseDto> {
+    this.validateCreateUserRequest(request);
 
     const isAvailable = await this.userRepository.checkAvailableEmailsAndPhones(
-      createUserDto.email?.trim() ? [createUserDto.email?.trim()] : [],
-      createUserDto.phoneNumber?.trim() ? [createUserDto.phoneNumber?.trim()] : [],
+      request.email?.trim() ? [request.email?.trim()] : [],
+      request.phoneNumber?.trim() ? [request.phoneNumber?.trim()] : [],
     );
 
     if (isAvailable) {
@@ -30,18 +30,18 @@ export class CreateUserUseCase {
       });
     }
 
-    const processUserData = async (user: UserEntity): Promise<void> => {
+    const processUserData = async (user: UserDto): Promise<void> => {
       user.password = await hashString(user.password);
       user.email = user.email?.trim()?.toLowerCase();
     };
 
-    await processUserData(createUserDto);
+    await processUserData(request);
 
-    return { id: await this.userRepository.save(createUserDto) };
+    return { id: await this.userRepository.save(request) };
   }
 
-  private validateCreateUserRequest(createUserDto: UserEntity): void {
-    const validateUserData = (user: UserEntity): boolean => {
+  private validateCreateUserRequest(createUserDto: UserDto): void {
+    const validateUserData = (user: UserDto): boolean => {
       if (!user.email && !user.phoneNumber) {
         return false;
       }

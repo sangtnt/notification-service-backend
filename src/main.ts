@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
   INestMicroservice,
@@ -10,6 +10,9 @@ import {
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { grpcOptions } from './configs/grpc.config';
 import { DefaultRpcExceptionFilter } from './shared/utils/filters/rpc-exception.filter';
+import { CustomLoggerService } from './shared/utils/logger/services/custom-logger.service';
+import { GrpcRequestLoggingInterceptor } from './shared/utils/logger/interceptors/grpc-request-logging.interceptor';
+import { ClsService } from 'nestjs-cls';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, grpcOptions);
@@ -29,8 +32,13 @@ async function bootstrap(): Promise<void> {
 }
 
 function configure(app: INestMicroservice): void {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const cls = app.get(ClsService);
+  const reflector = app.get(Reflector);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new DefaultRpcExceptionFilter());
+  app.useLogger(app.get(CustomLoggerService));
+  app.useGlobalInterceptors(new GrpcRequestLoggingInterceptor(cls, reflector));
 
   app.enableShutdownHooks(
     Object.values(ShutdownSignal).filter((x) => x !== ShutdownSignal.SIGUSR2),

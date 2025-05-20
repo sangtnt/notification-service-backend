@@ -1,7 +1,9 @@
-import { UserEntity } from '@/core/entities/user.entity';
+import { ValidateNested } from 'class-validator';
+import { UserDto } from './user.dto';
 
 export class CreateUsersRequestDto {
-  users: UserEntity[];
+  @ValidateNested({ each: true })
+  users: UserDto[];
 }
 
 export class CreateUsersResponseDto {
