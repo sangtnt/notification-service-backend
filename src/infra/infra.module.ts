@@ -7,22 +7,30 @@ import { optionsFactory } from '@/shared/utils/database-factory.util';
 import { DataSource } from 'typeorm';
 import { authDatabaseConfigOptions } from '@/configs/auth-database.config';
 import { UserSchema } from './databases/typeorm/auth-db/entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      ...optionsFactory(AUTH_DATA_SOURCE_NAME),
+    TypeOrmModule.forRootAsync({
+      useFactory(configService: ConfigService) {
+        return {
+          ...optionsFactory(AUTH_DATA_SOURCE_NAME, configService),
+          name: AUTH_DATA_SOURCE_NAME,
+        };
+      },
+      inject: [ConfigService],
       name: AUTH_DATA_SOURCE_NAME,
     }),
   ],
   providers: [
     {
       provide: 'DATA_SOURCE',
-      useFactory: (): Promise<DataSource> => {
-        const dataSource = new DataSource(authDatabaseConfigOptions);
+      useFactory: (configService: ConfigService): Promise<DataSource> => {
+        const dataSource = new DataSource(authDatabaseConfigOptions(configService));
 
         return dataSource.initialize();
       },
+      inject: [ConfigService],
     },
     {
       provide: USER_REPOSITORY_TOKEN,

@@ -44,7 +44,7 @@ function getPinoDest(options: CustomLoggerOptions): DestinationStream | undefine
 }
 
 @Injectable()
-export class CustomLoggerService implements LoggerService {
+export class AppLoggerService implements LoggerService {
   private context?: string;
   private readonly logger: Logger;
 

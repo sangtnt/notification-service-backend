@@ -1,7 +1,7 @@
 import { Logger as TypeOrmLogger } from 'typeorm';
 import { Logger as NestLogger } from '@nestjs/common';
 
-class DatabaseLogger implements TypeOrmLogger {
+class DatabaseLoggerService implements TypeOrmLogger {
   private readonly logger = new NestLogger('SQL');
   private readonly isSilent =
     process.env['NODE_ENV'] === 'production' || process.env['NODE_ENV'] === 'staging';
@@ -53,4 +53,4 @@ class DatabaseLogger implements TypeOrmLogger {
   }
 }
 
-export default DatabaseLogger;
+export default DatabaseLoggerService;

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { DynamicModule, ExecutionContext, Module } from '@nestjs/common';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import { CustomLoggerService } from './services/custom-logger.service';
+import { AppLoggerService } from './services/app-logger.service';
 import { CUSTOM_LOGGER_OPTION, LoggerModuleOptions } from './model/logger.option';
 import { KafkaContext } from '@nestjs/microservices';
 import { randomBytes } from 'crypto';
@@ -31,9 +31,9 @@ export class LoggerModule {
           provide: CUSTOM_LOGGER_OPTION,
           useValue: options,
         },
-        CustomLoggerService,
+        AppLoggerService,
       ],
-      exports: [CustomLoggerService],
+      exports: [AppLoggerService],
       global: options.global,
     };
   }

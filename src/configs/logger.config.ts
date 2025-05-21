@@ -1,6 +1,6 @@
 import { Environment } from '@/shared/constants/constants';
-import { LoggerModuleOptions } from '@/shared/utils/logger/model/logger.option';
-import { Level } from '@/shared/utils/logger/utils/level';
+import { LoggerModuleOptions } from '@/shared/logger/model/logger.option';
+import { Level } from '@/shared/logger/utils/level';
 
 export function getLogLevels(): Level {
   return (process.env['LOG_LEVEL'] as Level) ?? 'debug';

@@ -6,6 +6,10 @@ export class UserDto {
   @MaxLength(255)
   email?: string;
 
+  @IsOptional()
+  @MaxLength(255)
+  userName?: string;
+
   @IsString()
   @IsOptional()
   @MaxLength(20)
@@ -14,11 +18,12 @@ export class UserDto {
   @IsString()
   @IsOptional()
   @MaxLength(100)
-  firstName!: string;
+  firstName?: string;
 
   @IsString()
+  @IsOptional()
   @MaxLength(100)
-  lastName!: string;
+  lastName?: string;
 
   @IsPhoneNumber()
   @IsOptional()
