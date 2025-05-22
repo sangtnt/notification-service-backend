@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-clean-standard",
+  "name": "notification-service-backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -18,8 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d ./src/configs/auth-database-cli-config.ts",
-    "migration:generate": "yarn typeorm migration:generate src/infra/databases/typeorm/auth-db/migrations/migrations -p",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d ./src/configs/notification-database-cli-config.ts",
+    "migration:generate": "yarn typeorm migration:generate src/infra/databases/typeorm/notification-db/migrations/migrations -p",
     "migration:run": "yarn typeorm migration:run",
     "migration:revert": "yarn typeorm migration:revert"
   },
@@ -32,6 +32,7 @@
     "@nestjs/microservices": "^11.1.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
+    "@sendgrid/mail": "^8.1.5",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",

@@ -5,14 +5,14 @@ import { PresentationModule } from './presentation/presentation.module';
 import { LoggerModule } from './shared/logger/logger.module';
 import { getLoggerOptions } from './configs/logger.config';
 import appConfig from './configs/app.config';
-import authDatabaseConfig from './configs/auth-database.config';
+import notificationDatabaseConfig from './configs/notification-database.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [appConfig, authDatabaseConfig],
+      load: [appConfig, notificationDatabaseConfig],
       cache: true,
     }),
     LoggerModule.forRoot(getLoggerOptions()),

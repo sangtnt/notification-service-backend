@@ -1,1 +1,1 @@
-export const AUTH_DATA_SOURCE_NAME = 'auth';
+export const NOTIFICATION_DATA_SOURCE_NAME = 'notification';

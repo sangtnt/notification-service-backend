@@ -1,4 +1,4 @@
-import { authDatabaseConfigOptions } from '@/configs/auth-database.config';
+import { notificationDatabaseConfigOptions } from '@/configs/notification-database.config';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
@@ -7,8 +7,8 @@ export const optionsFactory = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => {
   switch (dataSource) {
-    case 'auth':
-      return authDatabaseConfigOptions(configService);
+    case 'notification':
+      return notificationDatabaseConfigOptions(configService);
     default: {
       throw new Error(`Unknown data source: ${dataSource}`);
     }
