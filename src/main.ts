@@ -7,7 +7,11 @@ import {
   ShutdownSignal,
   ValidationPipe,
 } from '@nestjs/common';
-import { DefaultRpcExceptionFilter } from './shared/utils/filters/rpc-exception.filter';
+import {
+  CatchEverythingFilter,
+  CatchValidationFilter,
+  DefaultRpcExceptionFilter,
+} from './shared/filters/rpc-exception.filter';
 import { AppLoggerService } from './shared/logger/services/app-logger.service';
 import { GrpcRequestLoggingInterceptor } from './shared/logger/interceptors/grpc-request-logging.interceptor';
 import { ClsService } from 'nestjs-cls';
@@ -43,7 +47,11 @@ function configure(app: INestApplication): void {
   const cls = app.get(ClsService);
   const reflector = app.get(Reflector);
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new DefaultRpcExceptionFilter());
+  app.useGlobalFilters(
+    new CatchEverythingFilter(),
+    new DefaultRpcExceptionFilter(),
+    new CatchValidationFilter(),
+  );
   app.useLogger(app.get(AppLoggerService));
   app.useGlobalInterceptors(new GrpcRequestLoggingInterceptor(cls, reflector));
 
