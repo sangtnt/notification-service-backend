@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { InfrastructureModule } from './infra/infra.module';
 import { PresentationModule } from './presentation/presentation.module';
 import { LoggerModule } from './shared/logger/logger.module';
 import { getLoggerOptions } from './configs/logger.config';
 import appConfig from './configs/app.config';
 import notificationDatabaseConfig from './configs/notification-database.config';
+import { DatabaseModule } from './infra/databases/database.module';
+import { SendGridModule } from './infra/sendgrid/sendgrid.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import notificationDatabaseConfig from './configs/notification-database.config';
       cache: true,
     }),
     LoggerModule.forRoot(getLoggerOptions()),
-    InfrastructureModule,
+    DatabaseModule,
     PresentationModule,
+    SendGridModule,
   ],
 })
 export class AppModule {}

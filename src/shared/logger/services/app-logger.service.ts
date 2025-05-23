@@ -7,7 +7,7 @@ import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { CUSTOM_LOGGER_OPTION, CustomLoggerOptions } from '../model/logger.option';
 import { ClsService } from 'nestjs-cls';
 import { getCallerFile } from '../utils/caller.utils';
-import pino, { DestinationStream, Logger, stdTimeFunctions } from 'pino';
+import pino, { DestinationStream, Logger as PLogger, stdTimeFunctions } from 'pino';
 import * as fs from 'fs';
 
 function getPinoDest(options: CustomLoggerOptions): DestinationStream | undefined {
@@ -44,9 +44,9 @@ function getPinoDest(options: CustomLoggerOptions): DestinationStream | undefine
 }
 
 @Injectable()
-export class AppLoggerService implements LoggerService {
+export class Logger implements LoggerService {
   private context?: string;
-  private readonly logger: Logger;
+  private readonly logger: PLogger;
 
   constructor(
     private readonly cls: ClsService,

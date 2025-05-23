@@ -17,6 +17,12 @@ export const ErrorCodes = {
     logLevel: LogLevel.ERROR,
   },
 
+  INTERNAL_SERVER_ERROR: {
+    code: 'NOTIFICATION-BE-INTERNAL_SERVER_ERROR',
+    message: 'Internal server error',
+    logLevel: LogLevel.ERROR,
+  },
+
   DATA_EXISTS: {
     code: 'NOTIFICATION-BE-DATA_EXIST',
     message: 'Data already exists',

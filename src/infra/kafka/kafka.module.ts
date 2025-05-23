@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { KafkaService } from './kafka.service';
+import { KafkaRepository } from './repositories/kafka.repository';
+import { KAFKA_REPOSITORY_TOKEN } from '@/shared/constants/repository-tokens.constant';
 
 @Module({
   imports: [
@@ -16,7 +17,12 @@ import { KafkaService } from './kafka.service';
       },
     ]),
   ],
-  providers: [KafkaService],
-  exports: [KafkaService],
+  providers: [
+    {
+      provide: KAFKA_REPOSITORY_TOKEN,
+      useClass: KafkaRepository,
+    },
+  ],
+  exports: [KAFKA_REPOSITORY_TOKEN],
 })
 export class KafkaModule {}

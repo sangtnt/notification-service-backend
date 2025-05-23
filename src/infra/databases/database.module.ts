@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { NOTIFICATION_DATA_SOURCE_NAME } from '@/shared/constants/data-source-name.constant';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { optionsFactory } from '@/shared/utils/database-factory.util';
-import { DataSource } from 'typeorm';
 import { notificationDatabaseConfigOptions } from '@/configs/notification-database.config';
+import { NOTIFICATION_DATA_SOURCE_NAME } from '@/shared/constants/data-source-name.constant';
+import { optionsFactory } from '@/shared/utils/database-factory.util';
+import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -30,6 +30,5 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     },
   ],
-  exports: ['DATA_SOURCE'],
 })
-export class InfrastructureModule {}
+export class DatabaseModule {}

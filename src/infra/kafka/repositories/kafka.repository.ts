@@ -1,19 +1,20 @@
-import { Injectable, Inject, OnModuleInit, OnApplicationShutdown, Logger } from '@nestjs/common';
+import { Logger } from '@/shared/logger/services/app-logger.service';
+import { Inject } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 
-@Injectable()
-export class KafkaService implements OnModuleInit, OnApplicationShutdown {
-  private readonly logger = new Logger(KafkaService.name);
-
-  constructor(@Inject('KAFKA_SERVICE') private readonly kafkaClient: ClientKafka) {}
+export class KafkaRepository {
+  constructor(
+    @Inject('KAFKA_SERVICE') private readonly kafkaClient: ClientKafka,
+    private logger: Logger,
+  ) {}
 
   async onModuleInit(): Promise<void> {
     try {
       await this.kafkaClient.connect();
       this.logger.log('Kafka Producer client connected successfully.');
     } catch (error) {
-      this.logger.error('Failed to connect Kafka Producer client:', error);
+      this.logger.error(`Failed to connect Kafka Producer client: ${JSON.stringify(error)}`);
     }
   }
 

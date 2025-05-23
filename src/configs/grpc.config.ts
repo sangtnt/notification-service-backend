@@ -5,8 +5,8 @@ import { join } from 'path';
 export const grpcOptions: GrpcOptions = {
   transport: Transport.GRPC,
   options: {
-    package: [],
-    protoPath: [],
+    package: ['notification.mail.v1'],
+    protoPath: ['notification/mail/v1/mail.proto'],
     url: `${process.env.HOST}:${process.env.GRPC_PORT}`,
     loader: {
       keepCase: false,

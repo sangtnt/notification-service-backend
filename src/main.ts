@@ -12,7 +12,7 @@ import {
   CatchValidationFilter,
   DefaultRpcExceptionFilter,
 } from './shared/filters/rpc-exception.filter';
-import { AppLoggerService } from './shared/logger/services/app-logger.service';
+import { Logger as AppLogger } from './shared/logger/services/app-logger.service';
 import { GrpcRequestLoggingInterceptor } from './shared/logger/interceptors/grpc-request-logging.interceptor';
 import { ClsService } from 'nestjs-cls';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -52,7 +52,7 @@ function configure(app: INestApplication): void {
     new DefaultRpcExceptionFilter(),
     new CatchValidationFilter(),
   );
-  app.useLogger(app.get(AppLoggerService));
+  app.useLogger(app.get(AppLogger));
   app.useGlobalInterceptors(new GrpcRequestLoggingInterceptor(cls, reflector));
 
   app.enableShutdownHooks(

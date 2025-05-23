@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package notification.mail.v1;
+
+import "google/protobuf/empty.proto";
+
+message SendMailRequest {
+    repeated string to = 1;
+    repeated string cc = 2;
+    repeated string bcc = 3;
+    string template_id = 5;
+    map<string, string> dynamic_template_data = 6;
+}
+
+service MailService {
+    rpc SendMail(SendMailRequest) returns (google.protobuf.Empty);
+}
